@@ -128,7 +128,24 @@ public class RNBluetoothEscposPrinterModule extends ReactContextBaseJavaModule
         }
     }
 
-
+    @ReactMethod
+    public void printerInit2(final Promise promise){
+        byte[] INIT = {0x1b, 0x40};
+        if(sendDataByte(INIT)){
+            promise.resolve(null);
+        }else{
+            promise.reject("COMMAND_NOT_SEND");
+        }
+    }
+    @ReactMethod
+    public void printerSendCut(final Promise promise){
+        byte[] SendCut = Arrays.copyOf(Command.GS_V_m_n, Command.GS_V_m_n.length);
+        if(sendDataByte(SendCut)){
+            promise.resolve(null);
+        }else{
+            promise.reject("COMMAND_NOT_SEND");
+        }
+    }
     @ReactMethod
     public void printText(String text, @Nullable  ReadableMap options, final Promise promise) {
         try {
@@ -341,7 +358,7 @@ public class RNBluetoothEscposPrinterModule extends ReactContextBaseJavaModule
              * Returns: byte[]
              */
             byte[] data = PrintPicture.POS_PrintBMP(mBitmap, width, nMode, leftPadding);
-            //  SendDataByte(buffer);
+            //	SendDataByte(buffer);
             sendDataByte(Command.ESC_Init);
             sendDataByte(Command.LF);
             sendDataByte(data);
@@ -434,29 +451,6 @@ public class RNBluetoothEscposPrinterModule extends ReactContextBaseJavaModule
         sendDataByte(command);
     }
 
-    @ReactMethod
-    public void openDrawer(int nMode, int nTime1, int nTime2) {
-        try{
-            byte[] command = PrinterCommand.POS_Set_Cashbox(nMode, nTime1, nTime2);
-            sendDataByte(command);
-
-         }catch (Exception e){
-            Log.d(TAG, e.getMessage());
-        }
-    }
-
-
-    @ReactMethod
-    public void cutOnePoint() {
-        try{
-            byte[] command = PrinterCommand.POS_Cut_One_Point();
-            sendDataByte(command);
-
-         }catch (Exception e){
-            Log.d(TAG, e.getMessage());
-        }
-    }    
-
     private boolean sendDataByte(byte[] data) {
         if (data==null || mService.getState() != BluetoothService.STATE_CONNECTED) {
             return false;
@@ -487,7 +481,7 @@ public class RNBluetoothEscposPrinterModule extends ReactContextBaseJavaModule
 
     /****************************************************************************************************/
 
-    private static class ColumnSplitedString{
+    public static class ColumnSplitedString{
         private int shorter;
         private String str;
 
