@@ -190,10 +190,10 @@ public class RNBluetoothEscposPrinterModule extends ReactContextBaseJavaModule
                 totalLen+=columnWidths.getInt(i);
             }
             int maxLen = deviceWidth/8;
-            if(totalLen>maxLen){
-                promise.reject("COLUNM_WIDTHS_TOO_LARGE");
-                return;
-            }
+//             if(totalLen>maxLen){
+//                 promise.reject("COLUNM_WIDTHS_TOO_LARGE");
+//                 return;
+//             }
 
         String encoding = "GBK";
         int codepage = 0;
